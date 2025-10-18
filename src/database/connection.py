@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from urllib.parse import quote
 from pymongo import AsyncMongoClient
 from pymongo.asynchronous.database import AsyncDatabase
@@ -40,3 +41,22 @@ async def init_database(settings: MongoSettings) -> AsyncMongoClient:
         return client
     except Exception as e:
         raise (e)
+
+
+@asynccontextmanager
+async def get_mongo_session(settings: MongoSettings):
+    try:
+        client: AsyncMongoClient = get_mongodb_client(settings.host, settings.port, settings.user, settings.password)
+        db: AsyncDatabase = client[settings.db]
+
+        await init_beanie(database=db, document_models=[
+            BtcHourKline, BtcDayKline,
+            EthHourKline, EthDayKline,
+            UsdCurrency
+        ])
+
+        yield client
+    except Exception as e:
+        raise (e)
+    finally:
+        await client.close()

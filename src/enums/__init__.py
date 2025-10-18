@@ -1,3 +1,5 @@
-from .enums import IntervalType, CryptoType, CurrencyType
+from .enums import IntervalType, CryptoType, CurrencyType, SortType
 
-__all__ = [ "IntervalType", "CryptoType", "CurrencyType" ]
+
+__version__ = "0.0.1"
+__all__ = [ "IntervalType", "CryptoType", "CurrencyType", "SortType" ]

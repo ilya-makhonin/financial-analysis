@@ -4,6 +4,16 @@ from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
+class PeriodConstants:
+    period_start: datetime
+
+
+@dataclass(frozen=True)
+class LimitConstants:
+    max_limit: int
+
+
+@dataclass(frozen=True)
 class CurrencyNameConstants:
     usd_currency: str
 
@@ -29,20 +39,17 @@ class CryptoNameConstants:
 
 
 @dataclass(frozen=True)
-class PeriodConstants:
-    period_start: datetime
-
-
-@dataclass(frozen=True)
 class Constants:
     period: PeriodConstants
     crypto: CryptoNameConstants
     currency: CurrencyNameConstants
+    limit: LimitConstants
 
 
 CONSTANTS: Final[Constants] = Constants(
     period=PeriodConstants(period_start=datetime(2020, 1, 1, 0, 0, 0)),
     currency=CurrencyNameConstants(usd_currency="usd_currency"),
+    limit=LimitConstants(max_limit=1000),
     crypto=CryptoNameConstants(
         btc_hour="btc_hour",
         btc_day="btc_day",

@@ -23,3 +23,9 @@ class CryptoType(str, Enum):
 class CurrencyType(str, Enum):
     RUB = "RUB"
     USD = "USD"
+
+
+@unique
+class SortType(str, Enum):
+    LINEAR = "LINEAR"
+    INVERSE = "INVERSE"

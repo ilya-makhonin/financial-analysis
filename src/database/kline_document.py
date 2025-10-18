@@ -1,6 +1,7 @@
 from typing_extensions import Self
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from pydantic import BaseModel, model_validator
+from src.enums import IntervalType
 
 
 class Kline(BaseModel):
@@ -15,7 +16,9 @@ class Kline(BaseModel):
 
     @model_validator(mode='after')
     def after_end_date(self) -> Self:
-        if self.end_date is None and self.interval:
-            hours = 23 if self.interval == "day" else 0 
-            self.end_date = self.start_date + timedelta(hours=hours, minutes=59, seconds=59)
+        if self.start_date and self.end_date is None and self.interval:
+            res = self.start_date + timedelta(hours=0, minutes=59, seconds=59)\
+                if self.interval == IntervalType.HOUR\
+                else datetime.combine(self.start_date.date(), time(23, 59, 59))
+            self.end_date = res
         return self

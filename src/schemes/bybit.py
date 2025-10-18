@@ -3,7 +3,7 @@ from .kline import KlineScheme
 from pydantic import BaseModel, ConfigDict, Field, model_validator, field_validator
 
 
-class ByBitResponseKlineScheme(BaseModel, KlineScheme):
+class ByBitResponseKlineScheme(KlineScheme):
     @model_validator(mode='before')
     @classmethod
     def get_model_from_list(cls, data: list[str]) -> dict[str, str]:

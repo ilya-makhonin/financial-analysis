@@ -2,7 +2,10 @@ from contextlib import asynccontextmanager
 from pybit.unified_trading import HTTP, WebSocket
 
 
-def connection_http(is_testnet: bool, key: str | None = None, secret: str | None = None):
+def connection_http(
+    is_testnet: bool,
+    key: str | None = None, secret: str | None = None
+) -> HTTP:
     if key and secret and not is_testnet:
         config = {
             "testnet": is_testnet,
@@ -17,11 +20,9 @@ def connection_http(is_testnet: bool, key: str | None = None, secret: str | None
 
 
 def connection_websocket(
-    is_testnet: bool,
-    key: str | None = None,
-    secret: str | None = None,
-    channel: str = "linear"
-):
+    is_testnet: bool, channel: str = "linear",
+    key: str | None = None, secret: str | None = None
+) -> WebSocket:
     config = { "testnet": is_testnet, "channel_type": channel }
 
     if key and secret:
@@ -42,3 +43,15 @@ async def http_session(is_testnet: bool):
         yield session
     except Exception as e:
         print(e)
+
+
+@asynccontextmanager
+async def ws_session(is_testnet: bool):
+    try:
+        session = connection_websocket(is_testnet=is_testnet)
+        yield session
+    except Exception as e:
+        print(e)
+    finally:
+        if session and not session.exited:
+            session.exit()

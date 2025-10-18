@@ -55,7 +55,7 @@ class OdmMethods:
             if DocumentClass:
                 result: list[BaseDocument] = await DocumentClass.find(
                     BaseDocument.start_date >= period_start,
-                    BaseDocument.end_date <= period_end
+                    BaseDocument.start_date <= period_end
                 ).to_list()
 
                 return result
