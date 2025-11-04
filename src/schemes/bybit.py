@@ -21,3 +21,9 @@ class ByBitResponseScheme(BaseModel):
     symbol: str
     category: str
     data: list[ByBitResponseKlineScheme] | None = Field(alias="list", default=None)
+
+    @field_validator('data', mode='after')
+    @classmethod
+    def start_date_validator(cls, value: list[ByBitResponseKlineScheme] | None) -> str:
+        if value: value.reverse()
+        return value

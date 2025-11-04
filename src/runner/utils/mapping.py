@@ -9,6 +9,7 @@ class MappingParam:
     _sort: dict[SortType, str] = {
         SortType.LINEAR: "linear",
         SortType.INVERSE: "inverse",
+        SortType.SPOT: "spot",
     }
     _symbol: dict[CryptoType, str] = {
         CryptoType.BTC: "BTCUSDT",

@@ -1,5 +1,10 @@
+import logging
+
 from contextlib import asynccontextmanager
 from pybit.unified_trading import HTTP, WebSocket
+
+
+logger = logging.getLogger(__name__)
 
 
 def connection_http(
@@ -20,7 +25,7 @@ def connection_http(
 
 
 def connection_websocket(
-    is_testnet: bool, channel: str = "linear",
+    is_testnet: bool, channel: str = "spot",
     key: str | None = None, secret: str | None = None
 ) -> WebSocket:
     config = { "testnet": is_testnet, "channel_type": channel }
@@ -42,7 +47,7 @@ async def http_session(is_testnet: bool):
         session = connection_http(is_testnet=is_testnet)
         yield session
     except Exception as e:
-        print(e)
+        print("http_session: ", e)
 
 
 @asynccontextmanager

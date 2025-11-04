@@ -18,11 +18,10 @@ class DateUtils:
             delta = timedelta(days=limit)
         else:
             delta = timedelta(hours=limit)
-
         return start + delta
 
     @classmethod
-    def get_clear_end(cls, date: datetime, type: IntervalType):
+    def get_clear_datetime(cls, date: datetime, type: IntervalType):
         if type == IntervalType.DAY:
             day_ended = date.hour == 23 and date.minute > 56
             base = datetime.combine(date.date(), time(hour=0, minute=0, second=0))
@@ -38,7 +37,6 @@ class DateUtils:
             delta = timedelta(days=1)
         else:
             delta = timedelta(hours=1)
-
         return date + delta
 
     @classmethod
@@ -55,7 +53,6 @@ class DateUtils:
         delta = end - start
         hours_from_days = abs(delta.days * 24)
         hours_from_seconds = abs(delta.seconds / 60 / 60)
-    
         return int(hours_from_days + hours_from_seconds)
     
     @classmethod

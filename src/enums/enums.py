@@ -29,3 +29,4 @@ class CurrencyType(str, Enum):
 class SortType(str, Enum):
     LINEAR = "LINEAR"
     INVERSE = "INVERSE"
+    SPOT = "SPOT"

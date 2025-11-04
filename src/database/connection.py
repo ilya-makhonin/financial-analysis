@@ -1,3 +1,5 @@
+import logging
+
 from contextlib import asynccontextmanager
 from urllib.parse import quote
 from pymongo import AsyncMongoClient
@@ -7,8 +9,17 @@ from src.config import MongoSettings
 from .documents import (
     BtcDayKline, BtcHourKline,
     EthDayKline, EthHourKline,
+    LtcDayKline, LtcHourKline,
+    SolDayKline, SolHourKline,
+    XrpDayKline, XrpHourKline,
+    TonDayKline, TonHourKline,
+    DogDayKline, DogHourKline,
+    TrxDayKline, TrxHourKline,
     UsdCurrency
 )
+
+
+logger = logging.getLogger(__name__)
 
 
 def get_mongo_connection_uri(host: str, port: int, user: str, password: str) -> str:
@@ -33,8 +44,14 @@ async def init_database(settings: MongoSettings) -> AsyncMongoClient:
         db: AsyncDatabase = client[settings.db]
 
         await init_beanie(database=db, document_models=[
-            BtcHourKline, BtcDayKline,
-            EthHourKline, EthDayKline,
+            BtcDayKline, BtcHourKline,
+            EthDayKline, EthHourKline,
+            LtcDayKline, LtcHourKline,
+            SolDayKline, SolHourKline,
+            XrpDayKline, XrpHourKline,
+            TonDayKline, TonHourKline,
+            DogDayKline, DogHourKline,
+            TrxDayKline, TrxHourKline,
             UsdCurrency
         ])
 
@@ -46,14 +63,7 @@ async def init_database(settings: MongoSettings) -> AsyncMongoClient:
 @asynccontextmanager
 async def get_mongo_session(settings: MongoSettings):
     try:
-        client: AsyncMongoClient = get_mongodb_client(settings.host, settings.port, settings.user, settings.password)
-        db: AsyncDatabase = client[settings.db]
-
-        await init_beanie(database=db, document_models=[
-            BtcHourKline, BtcDayKline,
-            EthHourKline, EthDayKline,
-            UsdCurrency
-        ])
+        client: AsyncMongoClient = await init_database(settings)
 
         yield client
     except Exception as e:
