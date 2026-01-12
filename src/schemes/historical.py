@@ -4,7 +4,7 @@ from src.enums import IntervalType, CryptoType
 
 
 class HistoricalScheme(BaseModel):
-    is_success: bool
+    is_success: bool = True
     interval: IntervalType
     crypto: CryptoType
-    last_klin_date: datetime
+    last_klin_date: datetime | None = None

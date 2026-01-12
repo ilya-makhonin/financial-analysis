@@ -6,12 +6,13 @@ import sys
 from datetime import datetime
 
 from src.config import load_config
-from src.enums import IntervalType, CryptoType
 from src.database import get_mongo_session
-from src.runner import get_historical_data
+from src.runner import HistoricalRunner
+from src.enums import IntervalType, CryptoType
 
 
 config = load_config()
+
 
 logging.basicConfig(
     level=logging.getLevelName(level=config.log.level),
@@ -25,19 +26,10 @@ if sys.platform.startswith("win") or os.name == "nt":
 
 async def main():
     async with get_mongo_session(config.mongo) as session:
-        if session:
-            for interval in IntervalType:
-                for crypto in CryptoType:
-                    print("\n START GETTING DATA BY: ", crypto, interval)
-                    await get_historical_data(
-                        config,
-                        crypto_type=crypto,
-                        interval_type=interval,
-                        start_date=datetime(2025, 11, 1, 0, 0, 0),
-                        end_date=datetime.now(),
-                    )
-                    print("\n END GETTING DATA BY: ", crypto, interval)
-                    await asyncio.sleep(1)
+        historical_runner = HistoricalRunner(config)
+
+        async for result in historical_runner.run_iterator():
+            print(result)
 
 
 if __name__ == "__main__":

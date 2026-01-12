@@ -17,7 +17,7 @@ class MongoSettings:
 
 
 @dataclass(frozen=True)
-class LoggSettings:
+class LogSettings:
     level: str
     format: str
     file: str
@@ -26,7 +26,7 @@ class LoggSettings:
 @dataclass(frozen=True)
 class Config:
     mongo: MongoSettings
-    log: LoggSettings
+    log: LogSettings
 
 
 def load_config(path: str | None = None) -> Config:
@@ -48,7 +48,7 @@ def load_config(path: str | None = None) -> Config:
         password=env("MONGO_PASSWORD"),
     )
 
-    logg_settings = LoggSettings(
+    logg_settings = LogSettings(
         level=env("LOG_LEVEL"), format=env("LOG_FORMAT"), file=env("LOG_FILE")
     )
 

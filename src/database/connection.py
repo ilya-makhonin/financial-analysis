@@ -20,6 +20,7 @@ from .documents import (
 
 
 logger = logging.getLogger(__name__)
+logging.getLogger("pymongo").setLevel(logging.ERROR)
 
 
 def get_mongo_connection_uri(host: str, port: int, user: str, password: str) -> str:
@@ -35,7 +36,7 @@ def get_mongodb_client(host: str, port: int, user: str, password: str) -> AsyncM
         mongo_client = AsyncMongoClient(uri_conn)
         return mongo_client
     except Exception as e:
-        raise (e)
+        logger.warning(e)
 
 
 async def init_database(settings: MongoSettings) -> AsyncMongoClient:
@@ -57,7 +58,7 @@ async def init_database(settings: MongoSettings) -> AsyncMongoClient:
 
         return client
     except Exception as e:
-        raise (e)
+        logger.warning(e)
 
 
 @asynccontextmanager
@@ -67,6 +68,6 @@ async def get_mongo_session(settings: MongoSettings):
 
         yield client
     except Exception as e:
-        raise (e)
+        logger.warning(e)
     finally:
         await client.close()

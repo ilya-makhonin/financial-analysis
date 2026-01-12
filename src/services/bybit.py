@@ -47,7 +47,7 @@ async def http_session(is_testnet: bool):
         session = connection_http(is_testnet=is_testnet)
         yield session
     except Exception as e:
-        print("http_session: ", e)
+        logger.warning("http_session: ", e)
 
 
 @asynccontextmanager
@@ -56,7 +56,7 @@ async def ws_session(is_testnet: bool):
         session = connection_websocket(is_testnet=is_testnet)
         yield session
     except Exception as e:
-        print(e)
+        logger.warning("ws_session: ", e)
     finally:
         if session and not session.exited:
             session.exit()
